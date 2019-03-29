@@ -116,14 +116,14 @@ rkafka.createProducer = function(metadataBrokerList,producerType="sync",compress
 #     * @param message:String
 #   *            !!Mandatory: message to be sent
 #   */
-rkafka.send <-function(producer, topicName, ip, message)
+rkafka.send <-function(producer, topicName, ip, message, verbose = TRUE)
 {
 	topicName <- as.character(topicName)
 	ip <- as.character(ip)
 	message <- as.character(message)
 	
 	.jcall(producer,"V","sendMessage", topicName, ip, message)
-	print("INFO:Remember to close the producer after done sending messages");
+	if (verbose) print("INFO:Remember to close the producer after done sending messages");
 }
 
 #function to shut down the producer
@@ -204,10 +204,10 @@ rkafka.createConsumer<- function(zookeeperConnect,topicName,groupId="test-consum
 #*		  @return String: next available message
 #*/
 
-rkafka.read<-function(ConsumerObj)
+rkafka.read<-function(ConsumerObj, verbose = TRUE)
 {
 	message=.jcall(ConsumerObj,"Ljava/lang/String;","tail")
-	print("INFO: Remember to close the consumer after done reading messages")
+	if (verbose) print("INFO: Remember to close the consumer after done reading messages")
   return(message)
 	
 }
@@ -217,9 +217,9 @@ rkafka.read<-function(ConsumerObj)
 #		  @param ConsumerObj: Consumer through which messages are to be read(Java Object)	
 #*		  @return String[]: Array of Strings
 #*/
-rkafka.readPoll<-function(ConsumerObj){
+rkafka.readPoll<-function(ConsumerObj, verbose = TRUE){
   messages=.jcall(ConsumerObj,"[Ljava/lang/String;","poll")
-  print("INFO: Remember to close the consumer after done reading messages")
+  if (verbose) print("INFO: Remember to close the consumer after done reading messages")
   return(messages)
 }
 
